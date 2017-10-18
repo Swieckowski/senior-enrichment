@@ -2,8 +2,10 @@ import axios from "axios";
 
 const initialState = {campuses:[]};
 
+//Action Type
 const GOT_CAMPUSES ="GOT CAMPUSES";
 
+//Action Creator
 const campusLoader = (data) => {
 	return {
 		type: GOT_CAMPUSES,
@@ -11,6 +13,7 @@ const campusLoader = (data) => {
 	}
 }
 
+//Thunk Creator
 export const loadCampuses = () => dispatch => {
 	axios.get("/api/campus/")
 	.then(response => response.data)
@@ -20,7 +23,8 @@ export const loadCampuses = () => dispatch => {
 	.catch(error=>console.log(error));
 }
 
-const campuses = function(state = initialState, action) {
+//Reducer
+const campusesObj = function(state = initialState, action) {
   switch(action.type) {
   	case GOT_CAMPUSES:
   		const newState = Object.assign({}, state, {campuses: action.payload})
@@ -29,4 +33,4 @@ const campuses = function(state = initialState, action) {
   }
 };
 
-export default campuses;
+export default campusesObj;

@@ -1,28 +1,37 @@
 import React, { Component } from "react";
+import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
 import { connect } from "react-redux";
 import {loadCampuses} from "../reducers/campusReducer";
+import {loadStudents} from "../reducers/studentReducer";
+import StudentList from "./StudentList"
+import CampusList from "./CampusList.jsx"
+import Navbar from "./Navbar"
 
 class Root extends Component {
 
   componentDidMount() {
-    this.props.fetchCampuses()
+    this.props.fetchCampusesAndStudents();
   }
 
   render() {
+
     return (
       <div>
-        <h1>Hello, we are starting the project</h1>
+        <Navbar/>
+        <Switch>
+          <Route exact path="/" component={CampusList}/>
+          <Route path="/students" component={StudentList}/>
+        </Switch>
       </div>
     )
   }
 }
 
-const mapStateToProps = (state) => ({
-  campuses: state
-});
-
 const mapDispatchToProps = (dispatch) => ({
-  fetchCampuses: () => dispatch(loadCampuses())
+  fetchCampusesAndStudents: () => {
+    dispatch(loadCampuses())
+    dispatch(loadStudents())
+  }
 });
 
-export default connect(mapStateToProps,mapDispatchToProps)(Root);
+export default withRouter(connect(null,mapDispatchToProps)(Root));
