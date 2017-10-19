@@ -13,12 +13,20 @@ const campusLoader = (data) => {
 	}
 }
 
-//Thunk Creator
+//Thunk Creators
 export const loadCampuses = () => dispatch => {
 	axios.get("/api/campus/")
 	.then(response => response.data)
-	.then(data =>{
-		dispatch(campusLoader(data))
+	.then(data => dispatch(campusLoader(data)))
+	.catch(error=>console.log(error));
+}
+
+export const deleteCampusAndUpdate = (id, history) => dispatch => {
+	axios.delete(`/api/campus/${id}`)
+	.then((response) =>response.data)
+	.then(data => {
+		history.push('/')
+		return dispatch(loadCampuses())
 	})
 	.catch(error=>console.log(error));
 }
