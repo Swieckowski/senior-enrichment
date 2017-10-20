@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import {updateCampus} from "../reducers/campusReducer";
+import {addCampus} from "../reducers/campusReducer";
 import CampusForm from "./CampusForm";
 
-class CampusEditor extends Component {
+class CampusPoster extends Component {
   constructor(props) {
     super(props);
     this.state ={
@@ -30,10 +30,10 @@ class CampusEditor extends Component {
   render() {
     const handleChange = this.handleChange;
     const submitHandler = this.submitHandler;
-    
+
     return (
       <div>
-        Edit campus details
+          Add new campus:
           <CampusForm 
             handleChange={handleChange}
             submitHandler={submitHandler}
@@ -45,9 +45,9 @@ class CampusEditor extends Component {
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  handleSubmit(state, evt){
-    dispatch(updateCampus(ownProps.id, state));
+  handleSubmit(student, evt){
+    dispatch(addCampus(student));
   }
 });
 
-export default connect(null,mapDispatchToProps)(CampusEditor);
+export default connect(null,mapDispatchToProps)(CampusPoster);

@@ -2,12 +2,13 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import {deleteStudentAndUpdate} from "../reducers/studentReducer";
 import { withRouter, Link} from 'react-router-dom';
+import StudentPoster from "./StudentPoster";
 
 
 const StudentList = (props) => {
 
   //variable for clarity
-  const {students, handleOnClick} = props;
+  const {students, campuses, handleOnClick} = props;
 
   return (
   	<div>
@@ -21,13 +22,15 @@ const StudentList = (props) => {
   					)
   			}):(<div>No students currently enrolled at any campuses.</div>)}
   		</ul>
+      {campuses.length?<StudentPoster/>:<div>No campuses currently established to enroll students to.</div>}
   	</div>
   	)
 
 }
 
 const mapStateToProps = (state) => ({
-  students: state.studentsObj.students
+  students: state.studentsObj.students,
+  campuses: state.campusesObj.campuses
 });
 
 const mapDispatchToProps = (dispatch) => ({

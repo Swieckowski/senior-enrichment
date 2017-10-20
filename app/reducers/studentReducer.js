@@ -49,6 +49,16 @@ export const updateStudent = (id, update) => dispatch => {
 	.catch(error=>console.log(error));
 }
 
+export const addStudent = (student) => dispatch => {
+	axios.post('/api/student/', student)
+	.then((response) =>response.data)
+	.then(data => {
+		dispatch(loadStudents());
+		dispatch(loadCampuses());
+	})
+	.catch(error=>console.log(error));
+}
+
 //Reducer
 const studentsObj = function(state = initialState, action) {
   switch(action.type) {

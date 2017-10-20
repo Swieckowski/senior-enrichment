@@ -27,4 +27,10 @@ router.put('/:id', (req, res, next) => {
 	.catch(next);
 });
 
+router.post('/', (req, res, next) => {
+	Student.create(req.body)
+	.then(()=>res.json({message: 'Posted Successfully'}))
+	.catch(next);
+});
+
 module.exports = router;

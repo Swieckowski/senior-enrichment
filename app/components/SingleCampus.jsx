@@ -4,6 +4,8 @@ import { connect } from "react-redux";
 import {deleteCampusAndUpdate} from "../reducers/campusReducer";
 import {deleteStudentAndUpdate} from "../reducers/studentReducer";
 import CampusEditor from "./CampusEditor";
+import StudentPoster from "./StudentPoster";
+
 
 const SingleCampus = (props) => {
 
@@ -19,6 +21,7 @@ const SingleCampus = (props) => {
         <br/>
         <img src={campus.imageUrl} height="84" width="84"/>
         <br/>
+        <CampusEditor id={campus.id}/>
         <br/>
         Current students:
     		<ul>
@@ -31,7 +34,7 @@ const SingleCampus = (props) => {
     					)
     			}): (<div>No students currently enrolled.</div>)}
     		</ul>
-        <CampusEditor id={campus.id}/>
+        <StudentPoster/>
     	</div>
     	) 
   } else return null;

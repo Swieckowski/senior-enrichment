@@ -7,7 +7,7 @@ router.get('/', (req, res, next) => {
 	.catch(next);
 });
 
-router.param("id", (req, res, next, id) => {
+router.param('id', (req, res, next, id) => {
 	Campus.findOne({where: {id: id}})
 	.then(function(campus){
 		req.campus = campus;
@@ -24,6 +24,12 @@ router.delete('/:id', (req, res, next) => {
 router.put('/:id', (req, res, next) => {
 	req.campus.update(req.body)
 	.then(()=>res.json({message: 'Updated Successfully'}))
+	.catch(next);
+});
+
+router.post('/', (req, res, next) => {
+	Campus.create(req.body)
+	.then(()=>res.json({message: 'Posted Successfully'}))
 	.catch(next);
 });
 

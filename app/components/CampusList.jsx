@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { withRouter, Link } from "react-router-dom";
 import { connect } from "react-redux";
 import {deleteCampusAndUpdate} from "../reducers/campusReducer";
+import CampusPoster from "./CampusPoster";
 
 const CampusList = (props) => {
 
@@ -10,6 +11,7 @@ const CampusList = (props) => {
 
   return (
     <div>
+      <br/>
       {campuses.length? campuses.map((campus)=>{
         return (
             <div key={campus.id}>
@@ -20,6 +22,8 @@ const CampusList = (props) => {
             </div>
             )
       }): (<div>No campuses currently established.</div>)}
+      <br/>
+      <CampusPoster/>
     </div>
   	)
 }

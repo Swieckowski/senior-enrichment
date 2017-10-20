@@ -1,15 +1,15 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import {updateCampus} from "../reducers/campusReducer";
-import CampusForm from "./CampusForm";
+import {addStudent} from "../reducers/studentReducer";
+import StudentForm from "./StudentForm";
 
-class CampusEditor extends Component {
+class StudentEditor extends Component {
   constructor(props) {
     super(props);
     this.state ={
-        name: "",
-        location: "",
-        imageUrl: ""
+        firstName: "",
+        lastName: "",
+        campusId: this.props.campuses[0].id
     };
     this.handleChange = this.handleChange.bind(this);
     this.submitHandler =this.submitHandler.bind(this);
@@ -24,30 +24,37 @@ class CampusEditor extends Component {
   submitHandler(evt){
     evt.preventDefault();
     this.props.handleSubmit(this.state, evt);
-    this.setState({name:"",location:"",imageUrl:""});
+    this.setState({firstName:"",lastName:""});
   }
 
   render() {
+
     const handleChange = this.handleChange;
     const submitHandler = this.submitHandler;
-    
-    return (
-      <div>
-        Edit campus details
-          <CampusForm 
+    const campuses = this.props.campuses;
+
+      return (
+        <div>
+          Add new student:
+          <StudentForm 
             handleChange={handleChange}
             submitHandler={submitHandler}
+            campuses={campuses}
             state={this.state}
           />
-      </div>
-    )
+        </div>
+      )
   }
 }
 
+const mapStateToProps = (state) => ({
+  campuses: state.campusesObj.campuses
+});
+
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  handleSubmit(state, evt){
-    dispatch(updateCampus(ownProps.id, state));
+  handleSubmit(student, evt){
+    dispatch(addStudent(student));
   }
 });
 
-export default connect(null,mapDispatchToProps)(CampusEditor);
+export default connect(mapStateToProps, mapDispatchToProps)(StudentEditor);
