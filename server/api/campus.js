@@ -7,12 +7,24 @@ router.get('/', (req, res, next) => {
 	.catch(next);
 });
 
+router.param("id", (req, res, next, id) => {
+	Campus.findOne({where: {id: id}})
+	.then(function(campus){
+		req.campus = campus;
+		next();
+	})
+});
+
 router.delete('/:id', (req, res, next) => {
-	Campus.findOne({where: {id: req.params.id} })
-	.then((campus) => campus.destroy({force: true}))
-	// I send an empty object here so that the axios request is completed.
-	.then(()=>res.json({}))
+	req.campus.destroy({force: true})
+	.then(()=>res.json({message: 'Deleted Successfully'}))
 	.catch(next);
-})
+});
+
+router.put('/:id', (req, res, next) => {
+	req.campus.update(req.body)
+	.then(()=>res.json({message: 'Updated Successfully'}))
+	.catch(next);
+});
 
 module.exports = router;

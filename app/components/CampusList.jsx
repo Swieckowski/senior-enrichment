@@ -6,20 +6,20 @@ import {deleteCampusAndUpdate} from "../reducers/campusReducer";
 const CampusList = (props) => {
 
   //variables for clarity
-  const campusesArr = props.campuses;
-  const {handleOnClick} = props;
+  const {handleOnClick, campuses} = props;
 
   return (
     <div>
-      {campusesArr.map((campus)=>{
+      {campuses.length? campuses.map((campus)=>{
         return (
             <div key={campus.id}>
-              <img src={campus.imageUrl} height="42" width="42"/>
               <Link to={`/campus/${campus.id}`}>{campus.name}</Link>
               <button onClick={() => handleOnClick(campus.id)}>X</button>
+              <br/>
+              <img src={campus.imageUrl} height="42" width="42"/>
             </div>
             )
-      })}
+      }): (<div>No campuses currently established.</div>)}
     </div>
   	)
 }
@@ -28,12 +28,10 @@ const mapStateToProps = (state) => ({
   campuses: state.campusesObj.campuses
 });
 
-//handleOnClick deletes a campus then redirects to the homepage, where the campus view is the default. 
-//This IS the campus view, but using the same Thunk as the single campus view seem seems DRYer to me.
-const mapDispatchToProps = (dispatch, ownProps) => ({
+const mapDispatchToProps = (dispatch) => ({
   handleOnClick (id){ 
-    dispatch(deleteCampusAndUpdate(id, ownProps.history));
+    dispatch(deleteCampusAndUpdate(id));
   }
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CampusList));
+export default connect(mapStateToProps, mapDispatchToProps)(CampusList);

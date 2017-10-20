@@ -1,4 +1,6 @@
 import axios from "axios";
+import {loadStudents} from "./studentReducer";
+import {objectDiscriminator} from "./helperFunction"
 
 const initialState = {campuses:[]};
 
@@ -21,15 +23,31 @@ export const loadCampuses = () => dispatch => {
 	.catch(error=>console.log(error));
 }
 
-export const deleteCampusAndUpdate = (id, history) => dispatch => {
+//The following Thunks make sure to update both students and campuses 
+// in the store after they've finished updating/deleting/etc.
+export const deleteCampusAndUpdate = (id, history=[]) => dispatch => {
 	axios.delete(`/api/campus/${id}`)
 	.then((response) =>response.data)
 	.then(data => {
-		history.push('/')
-		return dispatch(loadCampuses())
+		history.push('/');
+		dispatch(loadStudents());
+		dispatch(loadCampuses());
 	})
 	.catch(error=>console.log(error));
 }
+
+export const updateCampus = (id, update) => dispatch => {
+	// Gets rid of keys with empty string values
+	update = objectDiscriminator(update);
+	axios.put(`/api/campus/${id}`, update)
+	.then((response) =>response.data)
+	.then(data => {
+		dispatch(loadStudents());
+		dispatch(loadCampuses());
+	})
+	.catch(error=>console.log(error));
+}
+
 
 //Reducer
 const campusesObj = function(state = initialState, action) {
@@ -40,5 +58,6 @@ const campusesObj = function(state = initialState, action) {
     default: return state
   }
 };
+
 
 export default campusesObj;

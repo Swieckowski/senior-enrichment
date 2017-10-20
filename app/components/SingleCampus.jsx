@@ -2,32 +2,36 @@ import React, { Component } from "react";
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from "react-redux";
 import {deleteCampusAndUpdate} from "../reducers/campusReducer";
-
-
+import {deleteStudentAndUpdate} from "../reducers/studentReducer";
+import CampusEditor from "./CampusEditor";
 
 const SingleCampus = (props) => {
 
-  //variable for clarity
-  const {campus, handleOnClick} = props;
+  //variables for clarity
+  const {campus, handleOnClickStudent, handleOnClickCampus} = props;
 
   if(campus){
     return (
     	<div>
-        <h1>{campus.name}</h1>
+        <h1>{campus.name}<button onClick={() => handleOnClickCampus(campus.id)}>X</button></h1>
         <br/>
-        {campus.location}
+        Location: {campus.location}
         <br/>
-        <img src={campus.imageUrl} height="42" width="42"/>
-        <button onClick={() => handleOnClick(campus.id)}>X</button>
+        <img src={campus.imageUrl} height="84" width="84"/>
+        <br/>
+        <br/>
+        Current students:
     		<ul>
-    			{campus.students.map((student) => {
+    			{campus.students.length? campus.students.map((student) => {
     				return (
     					<li key={student.id}>
                 <Link to={`/student/${student.id}`}>{student.firstName+" "+student.lastName}</Link>
+                <button onClick={() => handleOnClickStudent(student.id)}>X</button>
               </li>
     					)
-    			})}
+    			}): (<div>No students currently enrolled.</div>)}
     		</ul>
+        <CampusEditor id={campus.id}/>
     	</div>
     	) 
   } else return null;
@@ -36,13 +40,16 @@ const SingleCampus = (props) => {
 
 //Using withRouter in conjunction with ownProps to map only the necessary campus to props
 const mapStateToProps = (state, ownProps) => ({
-  campus: state.campusesObj.campuses.find((campus)=> campus.id === parseInt(ownProps.match.params.campusId))
+  campus: state.campusesObj.campuses.find((campus)=> campus.id === parseInt(ownProps.match.params.campusId)),
 });
 
 //handleOnClick deletes a campus then redirects to the homepage, where the campus view is the default
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  handleOnClick (id){ 
+  handleOnClickCampus (id){ 
     dispatch(deleteCampusAndUpdate(id, ownProps.history));
+  },
+  handleOnClickStudent (id){ 
+    dispatch(deleteStudentAndUpdate(id));
   }
 });
 
